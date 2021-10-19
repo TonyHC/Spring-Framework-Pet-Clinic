@@ -57,7 +57,7 @@ public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements 
                     if (pet.getId() == null) {
                         // Save Pet to Map's Service
                         Pet savedPet = petService.save(pet);
-                        savedPet.setId(savedPet.getId());
+                        pet.setId(savedPet.getId());
                     }
                 });
             }
