@@ -1,17 +1,26 @@
 package com.springframework.springpetclinic.model;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@Entity
+@Table(name = "owners")
 public class Owner extends Person {
+    @Column(name = "address")
     private String address;
-    private String city;
-    private String telephone;
-    private Set<Pet> pets;
 
-    public Owner() {
-        pets = new HashSet<>();
-    }
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "telephone")
+    private String telephone;
+
+    // One To Many Bi-Directional Relationship: One Owner can have Many Pet(s)
+    // 'mappedBy' establishes that Owner owns the relationship (owning side) and
+    // makes this association Bi-Directional
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+    private Set<Pet> pets = new HashSet<>();
 
     public String getAddress() {
         return address;
