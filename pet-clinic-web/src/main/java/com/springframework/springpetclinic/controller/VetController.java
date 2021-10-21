@@ -1,7 +1,7 @@
 package com.springframework.springpetclinic.controller;
 
 import com.springframework.springpetclinic.model.Vet;
-import com.springframework.springpetclinic.service.VetService;
+import com.springframework.springpetclinic.services.VetService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
