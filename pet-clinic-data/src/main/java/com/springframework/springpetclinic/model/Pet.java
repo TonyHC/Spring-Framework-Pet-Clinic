@@ -2,6 +2,8 @@ package com.springframework.springpetclinic.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "pets")
@@ -10,7 +12,7 @@ public class Pet extends BaseEntity {
     private String name;
 
     // Many To One Uni-Directional Relationship: Many Pets have One PetType
-    // Specify the Foreign Key used to join the Entity Association (Pets and PetType)
+    // Specify the Foreign Key 'type_id' used to join the Entity Association (Pets and PetType)
     @ManyToOne
     @JoinColumn(name = "type_id")
     private PetType petType;
@@ -24,6 +26,12 @@ public class Pet extends BaseEntity {
 
     @Column(name = "birth_date")
     private LocalDate birthDate;
+
+    // One To Many Bi-Directional Relationship: One Pet can have Many Visits
+    // 'mappedBy' establishes that Pet owns the relationship (owning side) and
+    // makes this association Bi-Directional
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
+    private Set<Visit> visits = new HashSet<>();
 
     public String getName() {
         return name;
@@ -55,5 +63,13 @@ public class Pet extends BaseEntity {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public Set<Visit> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(Set<Visit> visits) {
+        this.visits = visits;
     }
 }
