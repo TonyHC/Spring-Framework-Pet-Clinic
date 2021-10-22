@@ -4,6 +4,7 @@ import com.springframework.springpetclinic.model.BaseEntity;
 
 import java.util.*;
 
+// Model Map Service Implementation after Data JPA
 public abstract class AbstractMapService<T extends BaseEntity, ID extends Long> {
     protected Map<Long, T> map = new HashMap<>();
 
