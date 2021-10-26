@@ -1,9 +1,14 @@
 package com.springframework.springpetclinic.model;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "owners")
 public class Owner extends Person {
@@ -20,109 +25,58 @@ public class Owner extends Person {
     // 'mappedBy' establishes that Owner owns the relationship (owning side) and
     // makes this association Bi-Directional
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-    private Set<Pet> pets = new HashSet<>();
+    private Set<Pet> pets;
 
+    @Builder
     public Owner(Long id, String firstName, String lastName, String address, String city,
                  String telephone, Set<Pet> pets) {
         super(id,firstName,lastName);
         this.address = address;
         this.city = city;
         this.telephone = telephone;
-        this.pets = pets;
-    }
 
-    public Owner() {
-    }
-
-    public static OwnerBuilder builder() {
-        return new OwnerBuilder();
-    }
-
-    public String getAddress() {
-        return this.address;
-    }
-
-    public String getCity() {
-        return this.city;
-    }
-
-    public String getTelephone() {
-        return this.telephone;
-    }
-
-    public Set<Pet> getPets() {
-        return this.pets;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public void setPets(Set<Pet> pets) {
-        this.pets = pets;
-    }
-
-    public static class OwnerBuilder {
-        private Long id;
-        private String firstName;
-        private String lastName;
-        private String address;
-        private String city;
-        private String telephone;
-        private Set<Pet> pets;
-
-        OwnerBuilder() {
-        }
-
-        public OwnerBuilder id(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public OwnerBuilder firstName(String firstName) {
-            this.firstName = firstName;
-            return this;
-        }
-
-        public OwnerBuilder lastName(String lastName) {
-            this.lastName = lastName;
-            return this;
-        }
-
-        public OwnerBuilder address(String address) {
-            this.address = address;
-            return this;
-        }
-
-        public OwnerBuilder city(String city) {
-            this.city = city;
-            return this;
-        }
-
-        public OwnerBuilder telephone(String telephone) {
-            this.telephone = telephone;
-            return this;
-        }
-
-        public OwnerBuilder pets(Set<Pet> pets) {
+        if (pets != null) {
             this.pets = pets;
-            return this;
+        }
+    }
+
+    public void addPet(Pet pet) {
+        if (pets == null) {
+            pets = new HashSet<>();
         }
 
-        public Owner build() {
-            return new Owner(id, firstName, lastName, address, city, telephone, pets);
+        if (pet.isNew()) {
+            pets.add(pet);
         }
 
-        public String toString() {
-            return "Owner.OwnerBuilder(id=" + this.id + ", firstName=" + this.firstName + ", lastName=" + this.lastName + ", address=" + this.address + ", city=" + this.city + ", telephone=" + this.telephone + ", pets=" + this.pets + ")";
+        pet.setOwner(this);
+    }
+
+    /**
+     * Return the Pet with the given name, or null if none found for this Owner.
+     * @param name to test
+     * @return true if pet name is already in use
+     */
+    public Pet getPet(String name) {
+        return getPet(name, false);
+    }
+
+    /**
+     * Return the Pet with the given name, or null if none found for this Owner.
+     * @param name to test
+     * @return true if pet name is already in use
+     */
+    public Pet getPet(String name, boolean ignoreNew) {
+        name = name.toLowerCase();
+        for (Pet pet : pets) {
+            if (!ignoreNew || !pet.isNew()) {
+                String compName = pet.getName();
+                compName = compName.toLowerCase();
+                if (compName.equals(name)) {
+                    return pet;
+                }
+            }
         }
+        return null;
     }
 }

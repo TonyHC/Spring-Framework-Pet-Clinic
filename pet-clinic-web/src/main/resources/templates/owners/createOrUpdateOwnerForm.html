@@ -19,23 +19,22 @@
     </div>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button>
             <!-- The [] will allow you to:
-                 Get a property, if the object is a bean (has getters and setters):
-                 ${car['type']}
-                 This will be equivalent to car.getType(); (or car.isType() if the type field is a boolean).
+            Get a property, if the object is a bean (has getters and setters):
+            ${car['type']}
+            This will be equivalent to car.getType(); (or car.isType() if the type field is a boolean).
 
-                 Get a key's value, if the object is a Map:
-                 ${carMap['Volvo']}
+            Get a key's value, if the object is a Map:
+            ${carMap['Volvo']}
 
-                 This will be equivalent to carMap.get('Volvo'); when carMap is a Map.
-                 Get an index, if the object is an array or List:
-                 ${cars[1]}
+            This will be equivalent to carMap.get('Volvo'); when carMap is a Map.
+            Get an index, if the object is an array or List:
+            ${cars[1]}
 
-                 This is equivalent to cars[1] if cars is an array or equivalent to cars.get(1) if cars is a List.> -->
-            th:with="text=${owner['new']} ? 'Add Owner' : 'Update Owner'"
-            class="btn btn-default" type="submit" th:text="${text}">Add
-            Owner</button>
+            This is equivalent to cars[1] if cars is an array or equivalent to cars.get(1) if cars is a List.> -->
+            <button th:with="text=${owner['new']} ? 'Add Owner' : 'Update Owner'"
+                class="btn btn-default" type="submit" th:text="${text}">
+                Add Owner</button>
         </div>
       </div>
     </form>
