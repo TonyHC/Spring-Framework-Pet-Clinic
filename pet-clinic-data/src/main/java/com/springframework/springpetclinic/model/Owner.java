@@ -34,12 +34,11 @@ public class Owner extends Person {
         this.address = address;
         this.city = city;
         this.telephone = telephone;
-
-        if (pets != null) {
-            this.pets = pets;
-        }
+        this.pets = pets;
     }
 
+    // Helper Method: To add a new Pet object
+    // and establish the newly added Pet object has a relationship with this Owner
     public void addPet(Pet pet) {
         if (pets == null) {
             pets = new HashSet<>();

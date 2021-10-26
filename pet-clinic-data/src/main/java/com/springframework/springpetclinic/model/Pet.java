@@ -37,7 +37,7 @@ public class Pet extends BaseEntity {
     // 'mappedBy' establishes that Pet owns the relationship (owning side) and
     // makes this association Bi-Directional
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
-    private Set<Visit> visits = new HashSet<>();
+    private Set<Visit> visits;
 
     @Builder
     public Pet(Long id, String name, PetType petType, Owner owner, LocalDate birthDate, Set<Visit> visits) {
@@ -47,5 +47,16 @@ public class Pet extends BaseEntity {
         this.owner = owner;
         this.birthDate = birthDate;
         this.visits = visits;
+    }
+
+    // Helper Method: To add a Visit object and
+    // establish the newly added Visit object has a relationship with this Pet
+    public void addVisit(Visit visit) {
+        if (visits == null) {
+            visits = new HashSet<>();
+        }
+
+        visits.add(visit);
+        visit.setPet(this);
     }
 }
