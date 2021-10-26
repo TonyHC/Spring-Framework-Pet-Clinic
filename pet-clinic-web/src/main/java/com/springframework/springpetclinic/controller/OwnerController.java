@@ -9,6 +9,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -27,7 +28,7 @@ public class OwnerController {
 
     @GetMapping("/find")
     public String findOwnersForm(Model model) {
-        Owner owner = new Owner();
+        Owner owner = Owner.builder().build();
 
         model.addAttribute("owner", owner);
 
@@ -67,5 +68,48 @@ public class OwnerController {
         ModelAndView mav = new ModelAndView("/owners/ownerDetails");
         mav.addObject(ownerService.findById(ownerId));
         return mav;
+    }
+
+    @GetMapping("/new")
+    public String ownerCreationForm(Model model) {
+        Owner owner = Owner.builder().build();
+
+        model.addAttribute("owner", owner);
+
+        return "/owners/createOrUpdateOwnerForm";
+    }
+
+    @PostMapping("/new")
+    public String processOwnerCreationForm(@Valid @ModelAttribute("owner") Owner owner,
+                                           BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "/owners/createOrUpdateOwnerForm";
+        } else {
+            Owner savedOwner = ownerService.save(owner);
+            return "redirect:/owners/" + savedOwner.getId();
+        }
+    }
+
+    @GetMapping("/{ownerId}/edit")
+    public String ownerUpdateForm(@PathVariable Long ownerId, Model model) {
+        Owner owner = ownerService.findById(ownerId);
+
+        model.addAttribute("owner", owner);
+
+        return "/owners/createOrUpdateOwnerForm";
+    }
+
+    @PostMapping("/{ownerId}/edit")
+    public String processOwnerUpdateForm(@Valid @ModelAttribute("owner") Owner owner,
+                                         BindingResult bindingResult, @PathVariable Long ownerId) {
+        if (bindingResult.hasErrors()) {
+            return "/owners/createOrUpdateOwnerForm";
+        } else {
+            // We have to manually set the id property of Owner due to @InitBinder method,
+            // which disallows the property (or field) 'id' from being binded
+            owner.setId(ownerId);
+            Owner savedOwner = ownerService.save(owner);
+            return "redirect:/owners/" + savedOwner.getId();
+        }
     }
 }
