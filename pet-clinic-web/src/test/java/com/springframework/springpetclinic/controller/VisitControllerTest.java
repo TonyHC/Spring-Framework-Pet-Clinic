@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -54,7 +55,10 @@ class VisitControllerTest {
         when(petService.findById(anyLong())).thenReturn(Pet.builder().id(1L).build());
         when(visitService.save(any())).thenReturn(Visit.builder().id(1L).build());
 
-        mockMvc.perform(post("/owners/1/pets/1/visits/new"))
+        mockMvc.perform(post("/owners/1/pets/1/visits/new")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("description", "visit to vet")
+                        .param("date", "2010-02-12"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/owners/{ownerId}"));
 
