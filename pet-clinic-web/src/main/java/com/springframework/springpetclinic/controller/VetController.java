@@ -22,6 +22,6 @@ public class VetController {
 
         model.addAttribute("vets", vets);
 
-        return "vets/list";
+        return "vets/vetList";
     }
 }
