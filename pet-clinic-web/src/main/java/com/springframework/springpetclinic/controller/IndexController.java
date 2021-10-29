@@ -10,8 +10,13 @@ public class IndexController {
         return "index";
     }
 
+    /*
+    * If we have an error.html file in resources/templates directory,
+    * it'll automatically be picked up by the default Spring Boot's BasicErrorController.
+     */
     @RequestMapping("oups")
     public String errorPage() {
-        return "notImplemented";
+        throw new RuntimeException(
+                "Expected: controller used to showcase what " + "happens when an exception is thrown");
     }
 }
